@@ -4,6 +4,10 @@ require("dotenv").config();
 
 const app = express();
 
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
+
 app.set("view engine", "ejs");
 app.use(require("body-parser").urlencoded({ extended: true }));
 
@@ -33,6 +37,18 @@ if (app.get("env") === "production") {
   app.set("trust proxy", 1); // trust first proxy
   sessionParms.cookie.secure = true; // serve secure cookies
 }
+
+app.set("trust proxy", 1);
+app.use(rateLimiter());
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
+app.use(express.json());
+app.use(helmet());
+
 var csrf = require("host-csrf");
 app.use(session(sessionParms));
 var cookieParser = require("cookie-parser");
@@ -88,7 +104,7 @@ app.use("/sessions", require("./routes/sessionRoutes"));
 const secretWordRouter = require("./routes/secretWord");
 const auth = require("./middleware/auth");
 app.use("/secretWord", auth, secretWordRouter);
-
+app.use("/", auth, require("./routes/trips"));
 app.use((req, res) => {
   res.status(404).send(`That page (${req.url}) was not found.`);
 });
