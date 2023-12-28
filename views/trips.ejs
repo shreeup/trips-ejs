@@ -1,0 +1,31 @@
+<%- include("partials/head.ejs") %>
+    <%- include("partials/header.ejs") %>
+    <h2>Trips List</h2>
+    <table id="Trips-table">
+        <tr id="Trips-table-header">
+            <th>Date</th>
+            <th>From</th>
+            <th>To</th>
+            <th colspan="2"></th>
+        </tr>
+        <% if (trips && trips.length) { %>
+            <% trips.forEach((trip)=> { %>
+                <tr>
+                    <td>
+                        <%= trip.date %>
+                    </td>
+                    <td>
+                        <%= trip.from %>
+                    </td>
+                    <td>
+                        <%= trip.to %>
+                    </td>
+                    <td><a href="/Trips/edit/<%= trip.id %>"><button type="button">edit</button></a></td>
+                    <td><form method="POST" action="/Trips/delete/<%= trip.id %>" style="display: inline">
+                        <button type="submit">delete</button>
+                        <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+                    </form></td>
+                </tr>
+                <% }) %>
+                    <% } %>
+    </table>

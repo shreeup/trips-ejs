@@ -1,0 +1,48 @@
+<%- include("partials/head.ejs") %>
+    <%- include("partials/header.ejs") %>
+<%if (trip) { %>
+    <form method="POST" action='/trips/update/<%= trip.id %>'>
+        <div>
+            <label name="date">Date:</label>
+            <input name="date" type="date" id="datecol" value="<%= tripdatetext%>"/>
+        </div>
+        <div>
+            <label name="from">From:</label>
+            <input type="text" name="from" value="<%= trip.from%>"/>
+        </div>
+        <div>
+            <label name="to">To:</label>
+            <input type="text" name="to" value="<%= trip.to%>"/>
+        </div>
+        <div>
+            <button>Submit</button>
+            <a href="/">
+                <button type="button">Cancel</button>
+            </a>
+        </div>
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+    </form>
+<% } else{ %>
+        <form method="POST" action='/trips' %>>
+            <div>
+                <label name="date">Date:</label>
+                <input name="date" type="date" />
+            </div>
+            <div>
+                <label name="from">From:</label>
+                <input type="text" name="from" />
+            </div>
+            <div>
+                <label name="to">To:</label>
+                <input type="text" name="to" />
+            </div>
+            <div>
+                <button>Submit</button>
+                <a href="/">
+                    <button type="button">Cancel</button>
+                </a>
+            </div>
+            <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        </form>
+        <% } %>
+        <%- include("partials/footer.ejs") %>
